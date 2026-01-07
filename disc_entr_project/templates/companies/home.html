@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+
+{% block title %}Nesterly - Intergenerational Homesharing | MIT Disciplined Entrepreneurship{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="company-badge">Featured Case Study</div>
+            <h1 class="hero-title">Nesterly</h1>
+            <p class="hero-tagline">{{ nesterly.tagline }}</p>
+            <p class="hero-origin">Born from {{ nesterly.origin }}</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">8</span>
+                    <span class="stat-label">Markets</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">$200K</span>
+                    <span class="stat-label">Maine Contract</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">2,000+</span>
+                    <span class="stat-label">Housing Days</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Navigation -->
+    <nav class="page-nav">
+        <a href="#overview">Overview</a>
+        <a href="#founders">Founders</a>
+        <a href="#markets">Markets</a>
+        <a href="#business-model">Business Model</a>
+        <a href="#metrics">Metrics</a>
+        <a href="#market-opportunity">Market Opportunity</a>
+        <a href="#competitors">Competitive Landscape</a>
+        <a href="{% url 'companies:companies_list' %}" class="nav-cta">View All Companies →</a>
+    </nav>
+
+    <!-- Overview Section -->
+    <section id="overview" class="content-section">
+        <h2>Company Overview</h2>
+        <div class="overview-grid">
+            <div class="info-card">
+                <h3>🏠 The Vision</h3>
+                <p>Nesterly connects older homeowners with spare bedrooms to younger renters seeking affordable housing, creating intergenerational matches that benefit both parties through reduced housing costs and companionship.</p>
+            </div>
+            <div class="info-card">
+                <h3>💡 Origin Story</h3>
+                <p>Conceived by Noelle Marcus and Rachel Goor as classmates in MIT's Housing, Community, and Economic Development master's program in 2016-2017. Marcus traces the concept to observing {{ nesterly.inspiration }}.</p>
+            </div>
+            <div class="info-card">
+                <h3>🚀 Current Status</h3>
+                <p>Actively operational and expanding as of January 2025. Recently secured Maine's <strong>$200,000 statewide contract</strong>—the first of its kind nationally—and launching in Nashville Summer 2025.</p>
+            </div>
+            <div class="info-card">
+                <h3>👥 Team</h3>
+                <p>Approximately {{ nesterly.team_size }} as of latest reports.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founders Section -->
+    <section id="founders" class="content-section">
+        <h2>Founding Team</h2>
+        <div class="founders-grid">
+            {% for founder in nesterly.founders %}
+            <div class="founder-card">
+                <div class="founder-avatar">{{ founder.name|slice:":1" }}</div>
+                <h3>{{ founder.name }}</h3>
+                <p class="founder-role">{{ founder.role }}</p>
+                <p class="founder-background">Previously: {{ founder.background }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="funding-section">
+            <h3>Funding & Support</h3>
+            <div class="funding-grid">
+                <div class="funding-card">
+                    <h4>Formal Funding</h4>
+                    <p class="funding-amount">{{ nesterly.funding.total }}</p>
+                    <p class="funding-note">(excludes grants & accelerators)</p>
+                </div>
+                <div class="funding-card">
+                    <h4>Grants Received</h4>
+                    <ul>
+                        {% for grant in nesterly.funding.grants %}
+                        <li>{{ grant }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="funding-card">
+                    <h4>Accelerators</h4>
+                    <ul>
+                        {% for acc in nesterly.funding.accelerators %}
+                        <li>{{ acc }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="funding-card">
+                    <h4>Investors</h4>
+                    <ul>
+                        {% for investor in nesterly.funding.investors %}
+                        <li>{{ investor }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Markets Section -->
+    <section id="markets" class="content-section">
+        <h2>Operational Footprint</h2>
+        <p class="section-intro">Nesterly currently operates in <strong>8 markets</strong> across the United States, with a strategic pivot from city-by-city partnerships to statewide programs.</p>
+        
+        <div class="markets-grid">
+            {% for market in nesterly.markets %}
+            <div class="market-card {% if market.status == 'Active' %}active{% elif market.status == 'Launching' %}launching{% else %}coming-soon{% endif %}">
+                <div class="market-status">{{ market.status }}</div>
+                <h3>{{ market.name }}</h3>
+                {% if market.since %}
+                <p class="market-since">Since {{ market.since }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Maine Contract Highlight -->
+        <div class="highlight-card">
+            <h3>🎯 Landmark Achievement: Maine Statewide Contract</h3>
+            <div class="highlight-grid">
+                <div>
+                    <p><strong>Contract Value:</strong> {{ nesterly.maine_contract.value }}</p>
+                    <p><strong>Significance:</strong> {{ nesterly.maine_contract.significance }}</p>
+                    <p><strong>Enabling Legislation:</strong> {{ nesterly.maine_contract.legislation }}</p>
+                </div>
+                <div>
+                    <p><strong>Partners:</strong></p>
+                    <ul>
+                        {% for partner in nesterly.maine_contract.partners %}
+                        <li>{{ partner }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section id="business-model" class="content-section">
+        <h2>Business Model</h2>
+        <div class="business-grid">
+            <div class="business-card">
+                <h3>💰 Revenue Streams</h3>
+                <div class="revenue-item">
+                    <span class="label">Booking Fee (one-time):</span>
+                    <span class="value">{{ nesterly.business_model.booking_fee }}</span>
+                </div>
+                <div class="revenue-item">
+                    <span class="label">Monthly Service Fee:</span>
+                    <span class="value">{{ nesterly.business_model.service_fee }}</span>
+                </div>
+            </div>
+            <div class="business-card">
+                <h3>🏠 Pricing</h3>
+                <div class="revenue-item">
+                    <span class="label">Average Rent:</span>
+                    <span class="value">{{ nesterly.business_model.avg_rent }}</span>
+                </div>
+                <div class="revenue-item">
+                    <span class="label">Host Earnings (avg):</span>
+                    <span class="value">{{ nesterly.business_model.host_earnings }}</span>
+                </div>
+                <div class="revenue-item">
+                    <span class="label">Minimum Stay:</span>
+                    <span class="value">{{ nesterly.business_model.min_stay }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Exchange -->
+        <div class="task-exchange-section">
+            <h3>🤝 Task Exchange Program</h3>
+            <p>Hosts can offer rent discounts in exchange for household assistance:</p>
+            <div class="task-grid">
+                <div class="task-card">
+                    <span class="task-value">{{ nesterly.task_exchange.discount }}</span>
+                    <span class="task-label">Monthly Discount</span>
+                </div>
+                <div class="task-card">
+                    <span class="task-value">{{ nesterly.task_exchange.hours }}</span>
+                    <span class="task-label">Time Commitment</span>
+                </div>
+            </div>
+            <div class="task-examples">
+                <h4>Example Tasks:</h4>
+                <div class="task-tags">
+                    {% for task in nesterly.task_exchange.tasks %}
+                    <span class="task-tag">{{ task }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Features -->
+        <div class="safety-section">
+            <h3>🔒 Safety & Trust Infrastructure</h3>
+            <ul class="safety-list">
+                {% for feature in nesterly.safety_features %}
+                <li>{{ feature }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="content-section">
+        <h2>Performance Metrics</h2>
+        <div class="metrics-grid">
+            <div class="metrics-card">
+                <h3>📍 Columbus (5 years)</h3>
+                <div class="metric-item">
+                    <span class="metric-value">{{ nesterly.key_metrics.columbus.housing_days }}</span>
+                    <span class="metric-label">Days of Affordable Housing</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">{{ nesterly.key_metrics.columbus.avg_stay }}</span>
+                    <span class="metric-label">Average Stay</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">{{ nesterly.key_metrics.columbus.avg_rent }}</span>
+                    <span class="metric-label">Average Rent</span>
+                </div>
+                <div class="metric-item">
+                    <span class="metric-value">{{ nesterly.key_metrics.columbus.task_exchange_rate }}</span>
+                    <span class="metric-label">Task Exchange Rate</span>
+                </div>
+            </div>
+            <div class="metrics-card">
+                <h3>📍 Boston (Original Market)</h3>
+                <div class="metric-item">
+                    <span class="metric-value">{{ nesterly.key_metrics.boston.active_listings }}</span>
+                    <span class="metric-label">Active Listings (Feb 2024)</span>
+                </div>
+                <p class="metric-note">Growth challenges in home market suggest scalability hurdles</p>
+            </div>
+        </div>
+
+        <!-- Benefits -->
+        <div class="benefits-section">
+            <h3>Impact & Benefits</h3>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="benefit-value">{{ nesterly.benefits.loneliness_reduction }}</span>
+                    <span class="benefit-label">Report Reduced Loneliness</span>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-value">{{ nesterly.benefits.safety_improvement }}</span>
+                    <span class="benefit-label">Report Feeling Safer</span>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-value">{{ nesterly.benefits.student_savings }}</span>
+                    <span class="benefit-label">Student Savings Potential</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Opportunity Section -->
+    <section id="market-opportunity" class="content-section">
+        <h2>Market Opportunity</h2>
+        <div class="opportunity-grid">
+            <div class="opp-card large">
+                <span class="opp-value">{{ nesterly.market_opportunity.homes_available }}</span>
+                <span class="opp-label">with older residents & spare bedrooms</span>
+            </div>
+            <div class="opp-card">
+                <span class="opp-value">{{ nesterly.market_opportunity.senior_living_market_2024 }}</span>
+                <span class="opp-label">Senior Living Market (2024)</span>
+            </div>
+            <div class="opp-card">
+                <span class="opp-value">{{ nesterly.market_opportunity.senior_living_market_2033 }}</span>
+                <span class="opp-label">Projected (2033)</span>
+            </div>
+            <div class="opp-card">
+                <span class="opp-value">{{ nesterly.market_opportunity.aging_in_place_market }}</span>
+                <span class="opp-label">Aging-in-Place Market</span>
+            </div>
+            <div class="opp-card">
+                <span class="opp-value">{{ nesterly.market_opportunity.growth_rate }}</span>
+                <span class="opp-label">Expected Growth</span>
+            </div>
+        </div>
+
+        <!-- Demographics -->
+        <div class="demographics-section">
+            <h3>📊 Demographic Tailwinds</h3>
+            <ul class="demo-list">
+                <li><strong>Population Shift:</strong> {{ nesterly.demographics.seniors_vs_children }}</li>
+                <li><strong>Preference:</strong> {{ nesterly.demographics.aging_in_place }}</li>
+                <li><strong>Wealth:</strong> {{ nesterly.demographics.home_equity }}</li>
+            </ul>
+        </div>
+
+        <!-- Gap Analysis -->
+        <div class="gap-analysis">
+            <h3>⚠️ Interest vs. Action Gap</h3>
+            <div class="gap-visual">
+                <div class="gap-bar">
+                    <div class="interested" style="width: 40%;">
+                        <span>{{ nesterly.market_opportunity.interest_rate }}</span>
+                    </div>
+                    <div class="action" style="width: 16%;">
+                        <span>{{ nesterly.market_opportunity.action_rate }}</span>
+                    </div>
+                </div>
+                <p class="gap-note">Interested vs. Actually Participating</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitors Section -->
+    <section id="competitors" class="content-section">
+        <h2>Competitive Landscape</h2>
+        
+        <!-- Silvernest -->
+        <div class="competitor-highlight">
+            <h3>🔄 Industry Shift: Silvernest Transition (March 2024)</h3>
+            <p>The largest for-profit competitor transferred its technology to nonprofit HomeShare Oregon:</p>
+            <div class="competitor-stats">
+                <div class="comp-stat">
+                    <span class="value">{{ nesterly.competitors.silvernest.funding }}</span>
+                    <span class="label">Funding Raised</span>
+                </div>
+                <div class="comp-stat">
+                    <span class="value">{{ nesterly.competitors.silvernest.matches }}</span>
+                    <span class="label">Matches Facilitated</span>
+                </div>
+                <div class="comp-stat">
+                    <span class="value">{{ nesterly.competitors.silvernest.status }}</span>
+                    <span class="label">Current Status</span>
+                </div>
+            </div>
+            <p class="insight"><strong>Key Insight:</strong> Despite significant funding and traction, Silvernest could not achieve sustainable profitability. Now operates as {{ nesterly.competitors.silvernest.new_name }} under nonprofit governance.</p>
+        </div>
+
+        <!-- Nonprofit Competitors -->
+        <div class="nonprofit-section">
+            <h3>Thriving Nonprofit Programs</h3>
+            <div class="nonprofit-grid">
+                {% for np in nesterly.competitors.nonprofits %}
+                <div class="nonprofit-card">
+                    <h4>{{ np.name }}</h4>
+                    <p class="np-location">{{ np.location }}</p>
+                    <p class="np-since">Since {{ np.since }}</p>
+                    {% if np.annual_housed %}
+                    <p class="np-metric">{{ np.annual_housed }} housed annually</p>
+                    {% endif %}
+                    {% if np.participants %}
+                    <p class="np-metric">{{ np.participants }} participants</p>
+                    {% endif %}
+                    {% if np.matches %}
+                    <p class="np-metric">{{ np.matches }} total matches</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <h2>Explore More Companies</h2>
+        <p>Nesterly is one of many MIT ventures applying disciplined entrepreneurship principles. Explore the full portfolio of delta v companies.</p>
+        <a href="{% url 'companies:companies_list' %}" class="cta-button">View All Companies →</a>
+    </section>
+</div>
+{% endblock %}

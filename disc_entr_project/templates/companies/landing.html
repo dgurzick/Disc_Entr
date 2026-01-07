@@ -5,43 +5,66 @@
 {% block content %}
 <div class="container">
     <section class="landing-section">
-        <h2>Welcome to the Disciplined Entrepreneurship Platform</h2>
-        <p class="intro-text">Track your company's progress through Bill Aulet's 24 Steps framework for building successful ventures.</p>
+        <h2>MIT delta v Companies</h2>
+        <p class="intro-text">Track entrepreneurial ventures through Bill Aulet's 24 Steps of Disciplined Entrepreneurship framework. Select a company to view their progress.</p>
         
         <div class="search-section">
             <input 
                 type="text" 
                 id="companySearch" 
-                placeholder="Search companies by name or year..."
+                placeholder="Search companies by name, tagline, or description..."
                 class="search-input"
             >
+        </div>
+
+        <div class="filter-section">
+            <label for="yearFilter">Cohort Year:</label>
+            <select id="yearFilter" class="year-filter">
+                <option value="">All Years</option>
+                {% for year in years %}
+                <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         {% if companies %}
         <section class="companies-grid">
             <h3>Select a Company</h3>
+            <p class="company-count"><span id="visibleCount">{{ companies.count }}</span> of {{ companies.count }} companies</p>
             <div class="companies-container">
                 {% for company in companies %}
-                <div class="company-card" data-company-name="{{ company.name }}" data-company-year="{{ company.year }}">
+                <div class="company-card" 
+                     data-company-name="{{ company.name }}" 
+                     data-company-year="{{ company.year }}"
+                     data-company-tagline="{{ company.tagline|default:'' }}"
+                     data-company-description="{{ company.description|default:'' }}">
                     <a href="{% url 'companies:company_detail' company.id %}">
-                        <h4>{{ company.name }}</h4>
-                        {% if company.year %}
-                        <p class="year">Year: {{ company.year }}</p>
-                        {% endif %}
-                        {% if company.sector %}
-                        <p class="sector">{{ company.sector }}</p>
-                        {% endif %}
-                        <div class="progress-indicator">
-                            <span class="step-badge">Step {{ company.current_step }}/24</span>
+                        <div class="card-header">
+                            <h4>{{ company.name }}</h4>
+                            {% if company.year %}
+                            <span class="year-badge">{{ company.year }}</span>
+                            {% endif %}
                         </div>
-                        <p class="view-details">View Details →</p>
+                        {% if company.tagline %}
+                        <p class="tagline">{{ company.tagline }}</p>
+                        {% endif %}
+                        {% if company.description %}
+                        <p class="description">{{ company.description|truncatewords:30 }}</p>
+                        {% endif %}
+                        {% if company.website %}
+                        <p class="website"><span class="website-icon">🌐</span> {{ company.website }}</p>
+                        {% endif %}
+                        <div class="card-footer">
+                            <div class="progress-indicator">
+                                <span class="step-badge">Step {{ company.current_step }}/24</span>
+                            </div>
+                            <span class="view-details">View Details →</span>
+                        </div>
                     </a>
                 </div>
                 {% endfor %}
             </div>
         </section>
-
-        <p class="company-count">{{ companies.count }} companies found</p>
         {% else %}
         <section class="no-companies">
             <p>No companies loaded yet. Loading from Excel file...</p>
@@ -88,20 +111,40 @@
 </div>
 
 <script>
-document.getElementById('companySearch').addEventListener('keyup', function(e) {
-    const searchText = e.target.value.toLowerCase();
-    const cards = document.querySelectorAll('.company-card');
+const searchInput = document.getElementById('companySearch');
+const yearFilter = document.getElementById('yearFilter');
+const cards = document.querySelectorAll('.company-card');
+const visibleCount = document.getElementById('visibleCount');
+
+function filterCompanies() {
+    const searchText = searchInput.value.toLowerCase();
+    const selectedYear = yearFilter.value;
+    let count = 0;
     
     cards.forEach(card => {
         const name = card.getAttribute('data-company-name').toLowerCase();
-        const year = card.getAttribute('data-company-year');
+        const year = card.getAttribute('data-company-year') || '';
+        const tagline = card.getAttribute('data-company-tagline').toLowerCase();
+        const description = card.getAttribute('data-company-description').toLowerCase();
         
-        if (name.includes(searchText) || year.includes(searchText)) {
+        const matchesSearch = name.includes(searchText) || 
+                             tagline.includes(searchText) || 
+                             description.includes(searchText) ||
+                             year.includes(searchText);
+        const matchesYear = !selectedYear || year === selectedYear;
+        
+        if (matchesSearch && matchesYear) {
             card.style.display = 'block';
+            count++;
         } else {
             card.style.display = 'none';
         }
     });
-});
+    
+    visibleCount.textContent = count;
+}
+
+searchInput.addEventListener('keyup', filterCompanies);
+yearFilter.addEventListener('change', filterCompanies);
 </script>
 {% endblock %}

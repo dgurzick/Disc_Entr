@@ -4,13 +4,12 @@ from django.db import models
 class Company(models.Model):
     """Model to store company information from Excel"""
     name = models.CharField(max_length=255, unique=True)
-    year = models.IntegerField()
-    # Add other fields based on your Excel structure
-    # You can customize these after reviewing the Excel file
-    sector = models.CharField(max_length=255, blank=True, null=True)
+    year = models.IntegerField(null=True, blank=True)
+    tagline = models.CharField(max_length=500, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
+    website = models.CharField(max_length=500, blank=True, null=True)  # Changed to CharField to handle various URL formats
+    sector = models.CharField(max_length=255, blank=True, null=True)
     contact_info = models.TextField(blank=True, null=True)
-    website = models.URLField(blank=True, null=True)
     
     # Fields for 24 Steps Framework
     current_step = models.IntegerField(default=1)  # 1-24

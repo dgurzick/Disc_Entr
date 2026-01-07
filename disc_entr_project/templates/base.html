@@ -5,13 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Disciplined Entrepreneurship{% endblock %}</title>
     {% load static %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     <nav class="navbar">
-        <div class="container">
-            <h1 class="logo">Disciplined Entrepreneurship</h1>
-            <p class="subtitle">24 Steps Framework - MIT DeltaV</p>
+        <div class="container navbar-content">
+            <div>
+                <a href="{% url 'companies:home' %}" class="logo-link">
+                    <h1 class="logo"><span>MIT</span> Disciplined Entrepreneurship</h1>
+                </a>
+                <p class="subtitle">24 Steps Framework • Martin Trust Center</p>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'companies:home' %}">Case Study</a>
+                <a href="{% url 'companies:companies_list' %}">All Companies</a>
+            </div>
         </div>
     </nav>
 
@@ -20,7 +31,7 @@
     </main>
 
     <footer class="footer">
-        <p>&copy; 2025 Disciplined Entrepreneurship Platform. Based on Bill Aulet's MIT Framework.</p>
+        <p>&copy; 2026 <a href="https://entrepreneurship.mit.edu/" target="_blank">Martin Trust Center for MIT Entrepreneurship</a> • Based on Bill Aulet's Framework</p>
     </footer>
 
     <script src="{% static 'js/main.js' %}"></script>

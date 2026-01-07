@@ -29,7 +29,7 @@
         <div class="progress-bar-section">
             <h4>Overall Progress</h4>
             <div class="progress-bar">
-                <div class="progress-fill" style="width: {{ company.current_step|add:'-1'|multiply:4.17 }}%"></div>
+                <div class="progress-fill" style="width: {{ progress_percentage }}%"></div>
             </div>
             <p class="progress-text">Step {{ company.current_step }} of 24</p>
         </div>

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ company.name }} - Disciplined Entrepreneurship{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="breadcrumb">
+        <a href="{% url 'companies:landing' %}">← Back to Companies</a>
+    </div>
+
+    <section class="company-header">
+        <h2>{{ company.name }}</h2>
+        {% if company.year %}
+        <p class="year">Founded: {{ company.year }}</p>
+        {% endif %}
+        
+        <div class="company-info">
+            {% if company.sector %}
+            <p><strong>Sector:</strong> {{ company.sector }}</p>
+            {% endif %}
+            {% if company.website %}
+            <p><strong>Website:</strong> <a href="{{ company.website }}" target="_blank">{{ company.website }}</a></p>
+            {% endif %}
+            {% if company.contact_info %}
+            <p><strong>Contact:</strong> {{ company.contact_info }}</p>
+            {% endif %}
+        </div>
+
+        <div class="progress-bar-section">
+            <h4>Overall Progress</h4>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ company.current_step|add:'-1'|multiply:4.17 }}%"></div>
+            </div>
+            <p class="progress-text">Step {{ company.current_step }} of 24</p>
+        </div>
+
+        {% if company.notes %}
+        <div class="company-notes">
+            <h4>Notes</h4>
+            <p>{{ company.notes }}</p>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="entrepreneurial-steps">
+        <h3>24 Steps Progress</h3>
+        
+        {% if steps_by_theme %}
+            {% for theme_name, theme_steps in steps_by_theme.items %}
+            <div class="theme-section">
+                <h4>{{ theme_name }}</h4>
+                <div class="steps-list">
+                    {% for step in theme_steps %}
+                    <div class="step-item status-{{ step.status|lower }}">
+                        <div class="step-header">
+                            <span class="step-number">Step {{ step.step_number }}</span>
+                            <h5>{{ step.step_title }}</h5>
+                            <span class="status-badge">{{ step.get_status_display }}</span>
+                        </div>
+                        {% if step.description %}
+                        <p class="step-description">{{ step.description }}</p>
+                        {% endif %}
+                        {% if step.notes %}
+                        <div class="step-notes">
+                            <strong>Notes:</strong> {{ step.notes }}
+                        </div>
+                        {% endif %}
+                        {% if step.completion_date %}
+                        <p class="completion-date">Completed: {{ step.completion_date|date:"M d, Y" }}</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <p class="no-steps">No steps tracked yet for this company. Start tracking progress by adding steps in the admin panel.</p>
+        {% endif %}
+    </section>
+
+    <section class="company-actions">
+        <h3>Actions</h3>
+        <div class="action-buttons">
+            <a href="/admin/companies/company/{{ company.id }}/change/" class="btn btn-primary">Edit Company</a>
+            <a href="/admin/companies/entrepreneurialstep/?company__id__exact={{ company.id }}" class="btn btn-secondary">Manage Steps</a>
+        </div>
+    </section>
+</div>
+{% endblock %}

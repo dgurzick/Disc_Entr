@@ -27,7 +27,7 @@ def home_page(request):
                 'MIT IDEAS Global Challenge: $7,500',
                 'MIT Sandbox: $5,000',
             ],
-            'accelerators': ['MassChallenge', 'Grand Central Tech'],
+            'accelerators': ['MassChallenge', 'Grand Central Tech'], 
             'investors': ['Access Ventures', 'Impact Assets', 'Blue Ridge Labs', 'GC Venture Fellows'],
         },
         'markets': [
